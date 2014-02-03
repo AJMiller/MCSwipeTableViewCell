@@ -8,13 +8,13 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
-static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
+static CGFloat const kMCStop1 = 0.125; // Percentage limit to trigger the first action
+static CGFloat const kMCStop2 = 0.65; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
 static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
-static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swipping the cell because we try to simulate velocity
-static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swipping the cell because we try to simulate velocity
+static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
+static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swiping the cell because we try to simulate velocity
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
@@ -87,7 +87,8 @@ secondStateIconName:(NSString *)secondIconName
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
+    //[_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
+	[_colorIndicatorView setBackgroundColor:[UIColor clearColor]];	//Delete this to revert to original line above^^^^
     [self insertSubview:_colorIndicatorView atIndex:0];
     
     _slidingImageView = [[UIImageView alloc] init];
@@ -140,7 +141,7 @@ secondStateIconName:(NSString *)secondIconName
     [super prepareForReuse];
     
     // Clearing before presenting back the cell to the user
-    [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
+    //[_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
     
     // clearing the dragging flag
     _isDragging = NO;
