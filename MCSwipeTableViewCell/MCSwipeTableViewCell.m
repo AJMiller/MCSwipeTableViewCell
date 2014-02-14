@@ -8,7 +8,7 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
+static CGFloat const kMCStop1 = 0.125; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
@@ -401,50 +401,52 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
-    UIImage *slidingImage = [UIImage imageNamed:imageName];
-    CGSize slidingImageSize = slidingImage.size;
-    CGRect slidingImageRect;
-    
-    CGPoint position = CGPointZero;
-    
-    position.y = CGRectGetHeight(self.bounds) / 2.0;
-    
-    if (isDragging) {
-        if (percentage >= 0 && percentage < kMCStop1) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage >= kMCStop1) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (percentage < 0 && percentage >= -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage < -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-    }
-    else {
-        if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else {
-            return;
-        }
-    }
-    
-    
-    slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
-                                  position.y - slidingImageSize.height / 2.0,
-                                  slidingImageSize.width,
-                                  slidingImageSize.height);
-    
-    slidingImageRect = CGRectIntegral(slidingImageRect);
-    [_slidingImageView setFrame:slidingImageRect];
+	if (imageName != nil) {
+		UIImage *slidingImage = [UIImage imageNamed:imageName];
+		CGSize slidingImageSize = slidingImage.size;
+		CGRect slidingImageRect;
+		
+		CGPoint position = CGPointZero;
+		
+		position.y = CGRectGetHeight(self.bounds) / 2.0;
+		
+		if (isDragging) {
+			if (percentage >= 0 && percentage < kMCStop1) {
+				position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+			
+			else if (percentage >= kMCStop1) {
+				position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+			else if (percentage < 0 && percentage >= -kMCStop1) {
+				position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+			
+			else if (percentage < -kMCStop1) {
+				position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+		}
+		else {
+			if (_direction == MCSwipeTableViewCellDirectionRight) {
+				position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+			else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+				position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+			}
+			else {
+				return;
+			}
+		}
+		
+		
+		slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
+									  position.y - slidingImageSize.height / 2.0,
+									  slidingImageSize.width,
+									  slidingImageSize.height);
+		
+		slidingImageRect = CGRectIntegral(slidingImageRect);
+		[_slidingImageView setFrame:slidingImageRect];
+	}
 }
 
 - (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
@@ -494,7 +496,7 @@ secondStateIconName:(NSString *)secondIconName
                          frame.origin.x = -bounceDistance;
                          [self.contentView setFrame:frame];
                          [_slidingImageView setAlpha:0.0];
-                         [self slideImageWithPercentage:0 imageName:_currentImageName isDragging:NO];
+						 [self slideImageWithPercentage:0 imageName:_currentImageName isDragging:NO];
                          
                          // Clearing the indicator view
                          [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
