@@ -314,7 +314,11 @@ secondStateIconName:(NSString *)secondIconName
         color = _fourthColor;
     else
         color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
-    
+	
+	CGFloat red, green, blue, alpha;
+	[color getRed:&red green:&green blue:&blue alpha:&alpha];
+	color = [UIColor colorWithRed:red green:green blue:blue alpha:fabs(percentage)];
+	DDLogInfo(@"Red: %f, Green: %f, Blue: %f, Alpha: %f", red, green, blue, fabs(percentage));
     return color;
 }
 
